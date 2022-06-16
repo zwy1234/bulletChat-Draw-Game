@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,8 +40,10 @@ public class UI {
         new UI();
 
     }
+
     public static  Map<String,String> map=new HashMap<>();
     public UI() {
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -64,7 +68,27 @@ public class UI {
         private int rowCount = 200;
         private List<Rectangle> cells;
         private Point selectedCell;
-        JButton startBtn;
+
+        static int cellWidth =0;
+        static int cellHeight = 0;
+
+
+        static int xOffset = 0;
+        static int yOffset = 0;
+        static String[] colors={"red","origin","yellow","green","blue","black","pink","gray"};
+        static int color_now=0;
+
+        static String[] split=null;
+
+        static String color="";
+
+        static Color color_0=null;
+
+        static Set<String> sets=null;
+
+        static Graphics2D g2d=null;
+
+        Font f = new Font("隶书",Font.PLAIN,20);
 
         static Timer timer;//100毫秒执行一次
         {
@@ -74,18 +98,41 @@ public class UI {
 
 
         public TestPane() {
+            this.addMouseListener(new MouseListener() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    // do nothing
+                    if(e.getButton()==e.BUTTON1){    // 判断获取的按钮是否为鼠标的右击
+                          // 获得鼠标点击位置的坐标并发送到标签的文字上
+
+                        map.put((e.getX()-xOffset)/cellWidth+","+(e.getY()-yOffset)/cellHeight,colors[color_now]);
+                    }
+                    if(e.getButton()==e.BUTTON3){
+                        color_now=(color_now+1)%colors.length;
+                    }
+                }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    // do nothing
+                }
+                @Override
+                public void mouseClicked(MouseEvent e) {
+
+//                pauseRestartTimer();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    // do nothing
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    // do nothing
+                }
+            });
 //            this.setBackground();
             cells = new ArrayList<>(columnCount * rowCount);
-            startBtn = new JButton("开始");
-            startBtn.setBounds(20,20,20,20);
-//            startBtn.setEnabled(false);
-            startBtn.addActionListener((e)-> {
-                int x = (int)(Math.random()*columnCount);
-                int y = (int)(Math.random()*rowCount);
-
-            });
-
-//            add(startBtn);
             timer.start();
         }
 
@@ -96,7 +143,6 @@ public class UI {
             Rectangle rect=ge.getMaximumWindowBounds();
             int w=rect.width;
             int h=rect.height;
-
             return new Dimension(w, h);
         }
 
@@ -104,31 +150,21 @@ public class UI {
         public void invalidate() {
             cells.clear();
             selectedCell = null;
-
             super.invalidate();
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
+             g2d= (Graphics2D) g.create();
 
             int width = getWidth();
             int height = getHeight();
-//            System.out.println("heihgt"+height);
-//            System.out.println("width"+width);
-
-//            //修改
-//            width=h;
-
-             int test0=25;
-
-            int cellWidth = (width-200) / columnCount;
-            int cellHeight = (height+55) / rowCount;
 
 
-            int xOffset = (width - (columnCount * cellWidth)) / 2;
-            int yOffset = (height - (rowCount * cellHeight)) / 2;
+            cellWidth = (width-200) / columnCount;
+            cellHeight = (height+55) / rowCount;
+
             xOffset=10;
             yOffset=10;
 
@@ -146,7 +182,6 @@ public class UI {
             }
 
             if (selectedCell != null) {
-
                 int index = selectedCell.x + (selectedCell.y * columnCount);
                 Rectangle cell = cells.get(index);
                 g2d.setColor(Color.BLUE);
@@ -160,16 +195,16 @@ public class UI {
             }
             g2d.setColor(Color.BLACK);
 
-            Set<String> sets = map.keySet();
+             sets = map.keySet();
             for (String set : sets) {
 //                System.out.println(set);
-                String[] split = set.split(",");
-                String color = map.get(set);
+                split = set.split(",");
+                color = map.get(set);
                 g2d.setColor(getColor(color));
                 g2d.fillRect(xOffset + ( Integer.parseInt(split[0])* cellWidth),yOffset + (Integer.parseInt(split[1]) * cellHeight),cellWidth,cellHeight);
             }
 
-            Font f = new Font("隶书",Font.PLAIN,20);
+
             g2d.setFont(f);
             g2d.setColor(Color.BLUE);
             g2d.drawString("发送 fill x坐标 y坐标 颜色(英文) 可填充",1020,200);
@@ -182,19 +217,18 @@ public class UI {
 
         public Color getColor(String colors){
 
-            Color color;
+
             try {
                 Field field = Class.forName("java.awt.Color").getField(colors);
-                color = (Color)field.get(null);
+                color_0 = (Color)field.get(null);
             } catch (Exception e) {
-                color = null; // Not defined
+                color_0 = null; // Not defined
             }
-            return color;
+            return color_0;
         }
         @Override
         public void actionPerformed(ActionEvent e) {
             repaint();
-
             timer.start();
         }
 
