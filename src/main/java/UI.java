@@ -186,7 +186,6 @@ public class UI {
                 Rectangle cell = cells.get(index);
                 g2d.setColor(Color.BLUE);
                 g2d.fill(cell);
-
             }
 
             g2d.setColor(Color.GRAY);
