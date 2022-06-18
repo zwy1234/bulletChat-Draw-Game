@@ -32,9 +32,9 @@ public class UI {
         danmuService.start();
 
         //update by people
-        updateByPeople update=new updateByPeople();
-        Thread t1=new Thread(update);
-        t1.start();
+//        updateByPeople update=new updateByPeople();
+//        Thread t1=new Thread(update);
+//        t1.start();
 
         //UI thread
         new UI();
@@ -88,6 +88,9 @@ public class UI {
 
         static Graphics2D g2d=null;
 
+        JLabel label = new JLabel();
+        ImageIcon img = new ImageIcon("src/main/images/pkq.png");// 创建图片对象
+
         Font f = new Font("隶书",Font.PLAIN,20);
 
         static Timer timer;//100毫秒执行一次
@@ -96,8 +99,12 @@ public class UI {
         }
 
 
-
         public TestPane() {
+
+            label.setIcon(img);
+
+            label.setBounds(1220,100,50,50);
+//            add(label);
             this.addMouseListener(new MouseListener() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -206,12 +213,30 @@ public class UI {
 
             g2d.setFont(f);
             g2d.setColor(Color.BLUE);
-            g2d.drawString("发送 fill x坐标 y坐标 颜色(英文) 可填充",1020,200);
-            g2d.drawString("单元格 例如 fill 10 20 red",1020,224);
+            g2d.drawString("发送 fill x坐标 y坐标 颜色(英文) 可填充",1020,60);
+            g2d.drawString("单元格 例如 fill 10 20 red",1020,84);
+            g2d.setColor(Color.RED);
+            g2d.drawString("发送 clear x坐标 y坐标  可清除单元格",1020,120);
+            g2d.drawString("例如clear 20 50",1020,144);
+
+            g2d.drawString("仅列出部分颜色，支持大部分常见颜色",1020,280);
+            g2d.setColor(Color.RED);
+            g2d.drawString("红色 red",1020,310);
             g2d.setColor(Color.GREEN);
-            g2d.drawString("发送 clear x坐标 y坐标  可清除单元格",1020,250);
-            g2d.drawString("例如clear 20 50",1020,270);
+            g2d.drawString("绿色 green",1180,310);
+            g2d.setColor(Color.YELLOW);
+            g2d.drawString("黄色 yellow",1020,340);
+            g2d.setColor(Color.GRAY);
+            g2d.drawString("灰色 gray",1180,340);
+            g2d.setColor(Color.PINK);
+            g2d.drawString("粉红色 pink",1020,370);
+            g2d.setColor(Color.BLUE);
+            g2d.drawString(" 蓝色 blue",1180,370);
+
+
+
             g2d.dispose();
+
         }
 
         public Color getColor(String colors){
