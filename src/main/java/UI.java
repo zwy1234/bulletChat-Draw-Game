@@ -41,6 +41,7 @@ public class UI {
 
     }
 
+    //存储上色各自坐标以及颜色
     public static  Map<String,String> map=new HashMap<>();
     public UI() {
 
@@ -64,8 +65,11 @@ public class UI {
         });
     }
     public  class TestPane extends JPanel implements ActionListener {
+        //列数
         private int columnCount = 200;
+        //行数
         private int rowCount = 200;
+
         private List<Rectangle> cells;
         private Point selectedCell;
 
@@ -75,10 +79,15 @@ public class UI {
 
         static int xOffset = 0;
         static int yOffset = 0;
+
+        //常见颜色英文
         static String[] colors={"red","origin","yellow","green","blue","black","pink","gray"};
+
+        //当前颜色
         static int color_now=0;
 
         static String[] split=null;
+
 
         static String color="";
 
